@@ -1,5 +1,10 @@
 # kiam
 
+# Fork changes:
+
+- Remove the passthrough for PUT requests to the metadata of the instance. This is due the conflicting APIs between AWS and Azure instances. Both serve the instance metadata on  169.254.169.254 about the instance. AWS CLI queries the endpoint for automatic config, unfortunately, it does not play well when you are running Kiam + Azure since out of the both Kiam allows a passthrough. Due the api difference the AWS CLI fails to configure correctly. 
+- Add CI to build the image and push to our repo
+
 [![Docker Repository on Quay](https://quay.io/repository/uswitch/kiam/status "Docker Repository on Quay")](https://quay.io/repository/uswitch/kiam)
 
 kiam runs as an agent on each node in your Kubernetes cluster and allows cluster users to associate IAM roles to Pods.
