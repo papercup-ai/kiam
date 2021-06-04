@@ -1,0 +1,31 @@
+version: 2.1
+
+orbs:
+  azure-acr: circleci/azure-acr@0.2.0
+
+jobs:
+  build:
+    executor:
+      name: azure-acr/default
+      dlc: true
+    environment:
+      LOGIN_SERVER_NAME: papercup.azurecr.io
+      ACR_REPO: kiam
+    steps:
+      # this step performs azure-cli/install and azure-cli/login-with-service-principal
+      - azure-acr/build-and-push-image:
+          checkout: true
+          registry-name: papercup
+          login-server-name: $LOGIN_SERVER_NAME
+          repo: $ACR_REPO
+          tag: $CIRCLE_SHA1,latest
+
+workflows:
+  version: 2
+  build_accept_deploy_k8s:
+    jobs:
+      - build:
+          context: AZURE
+          filters:
+            branches:
+              only: master
