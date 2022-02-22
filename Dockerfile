@@ -17,6 +17,9 @@ COPY Makefile Makefile
 RUN make bin/kiam-linux-amd64
 
 FROM alpine:3.15
-RUN apk --no-cache add iptables
+RUN apk --no-cache add iptables openssl \
+        ca-certificates \
+        curl && update-ca-certificates
+
 COPY --from=build /workspace/bin/kiam-linux-amd64 /kiam
 CMD []
